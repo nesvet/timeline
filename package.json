@@ -1,0 +1,28 @@
+{
+	"name": "@nesvet/timeline",
+	"version": "1.0.19",
+	"description": "Store values in a time-based map",
+	"type": "module",
+	"main": "./lib/index.js",
+	"module": "./lib/index.js",
+	"packageManager": "yarn@1.22.22",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/nesvet/timeline.git"
+	},
+	"keywords": [
+		"timeline",
+		"time",
+		"time-based",
+		"array",
+		"map"
+	],
+	"author": "Eugene Nesvetaev <dev@nesvet.dev> (https://nesvet.dev/)",
+	"license": "MIT",
+	"devDependencies": {
+		"@nesvet/eslint-config": "^1"
+	}
+}
