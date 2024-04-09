@@ -1,4 +1,4 @@
-# Store values in a time-based map
+# Store values in a day-based map
 
 ## Installation
 
