@@ -13,6 +13,7 @@ export class Timeline {
 		
 		this.a = [];
 		this.m = new Map();
+		this.limbo = new Timepiece([], null);
 		this.firstIndex = 4294967294;
 		this.startAt = null;
 		this.endAt = null;
@@ -20,6 +21,8 @@ export class Timeline {
 	}
 	
 	set(value, at) {
+		if (typeof at != "number")
+			at = null;
 		
 		const mat = this.m.get(value);
 		
@@ -27,20 +30,24 @@ export class Timeline {
 			if (mat)
 				this.remove(value);
 			
-			const index = tsToIndex(at);
-			
-			if (!this.a[index]?.add(value))
-				this.a[index] = new Timepiece([ value ], at);
-			
 			this.m.set(value, at);
 			
-			if (index < this.firstIndex) {
-				this.firstIndex = index;
-				this.startAt = indexToTs(index);
+			if (at === null)
+				this.limbo.add(value);
+			else {
+				const index = tsToIndex(at);
+				
+				if (!this.a[index]?.add(value))
+					this.a[index] = new Timepiece([ value ], at);
+				
+				if (index < this.firstIndex) {
+					this.firstIndex = index;
+					this.startAt = indexToTs(index);
+				}
+				
+				if (index === this.a.length - 1)
+					this.endAt = indexToTs(index);
 			}
-			
-			if (index === this.a.length - 1)
-				this.endAt = indexToTs(index);
 		}
 		
 	}
@@ -48,31 +55,34 @@ export class Timeline {
 	remove(value) {
 		
 		if (this.m.size > 1) {
-			
 			const at = this.m.get(value);
 			
-			if (at) {
+			if (at !== undefined) {
 				this.m.delete(value);
 				
-				const index = tsToIndex(at);
-				
-				const piece = this.a[index];
-				
-				if (piece.size > 1)
-					piece.delete(value);
+				if (at === null)
+					this.limbo.delete(value);
 				else {
-					delete this.a[index];
+					const index = tsToIndex(at);
 					
-					if (index === this.firstIndex) {
-						do
-							this.firstIndex++;
-						while (!this.a[this.firstIndex]);
-						this.startAt = indexToTs(this.firstIndex);
-					} else if (index === this.a.length - 1) {
-						do
-							this.a.length--;
-						while (!this.a[this.a.length - 1]);
-						this.endAt = indexToTs(this.a.length - 1);
+					const piece = this.a[index];
+					
+					if (piece.size > 1)
+						piece.delete(value);
+					else {
+						delete this.a[index];
+						
+						if (index === this.firstIndex) {
+							do
+								this.firstIndex++;
+							while (!this.a[this.firstIndex]);
+							this.startAt = indexToTs(this.firstIndex);
+						} else if (index === this.a.length - 1) {
+							do
+								this.a.length--;
+							while (!this.a[this.a.length - 1]);
+							this.endAt = indexToTs(this.a.length - 1);
+						}
 					}
 				}
 			}
