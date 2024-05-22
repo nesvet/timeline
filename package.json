@@ -1,6 +1,6 @@
 {
 	"name": "@nesvet/timeline",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"description": "Store values in a day-based map",
 	"type": "module",
 	"main": "./dist/index.js",
