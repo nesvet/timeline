@@ -5,10 +5,10 @@
 	"type": "module",
 	"main": "./dist/index.js",
 	"module": "./dist/index.js",
-	"packageManager": "yarn@1.22.22",
+	"packageManager": "bun@1.1.9",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"build": "node .conveyer"
+		"build": "bun .conveyer.js"
 	},
 	"repository": {
 		"type": "git",
@@ -24,7 +24,7 @@
 	"author": "Eugene Nesvetaev <dev@nesvet.dev> (https://nesvet.dev/)",
 	"license": "MIT",
 	"devDependencies": {
-		"@nesvet/conveyer": "^1",
+		"@nesvet/conveyer": "^2",
 		"@nesvet/eslint-config": "^1"
 	}
 }

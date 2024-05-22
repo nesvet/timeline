@@ -9,5 +9,5 @@ $ npm install @nesvet/timeline
 Or
 
 ```sh
-$ yarn add @nesvet/timeline
+$ bun add @nesvet/timeline
 ```
