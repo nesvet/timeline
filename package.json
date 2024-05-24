@@ -1,30 +1,30 @@
 {
-	"name": "@nesvet/timeline",
-	"version": "1.1.1",
-	"description": "Store values in a day-based map",
-	"type": "module",
-	"main": "./dist/index.js",
-	"module": "./dist/index.js",
-	"packageManager": "bun@1.1.9",
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
-		"build": "bun .conveyer.js"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/nesvet/timeline.git"
-	},
-	"keywords": [
-		"timeline",
-		"time",
-		"day",
-		"array",
-		"map"
-	],
-	"author": "Eugene Nesvetaev <dev@nesvet.dev> (https://nesvet.dev/)",
-	"license": "MIT",
-	"devDependencies": {
-		"@nesvet/conveyer": "^2",
-		"@nesvet/eslint-config": "^1"
-	}
+  "name": "@nesvet/timeline",
+  "version": "1.1.1",
+  "description": "Store values in a day-based map",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "packageManager": "bun@1.1.9",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "bun .conveyer.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nesvet/timeline.git"
+  },
+  "keywords": [
+    "timeline",
+    "time",
+    "day",
+    "array",
+    "map"
+  ],
+  "author": "Eugene Nesvetaev <dev@nesvet.dev> (https://nesvet.dev/)",
+  "license": "MIT",
+  "devDependencies": {
+    "@nesvet/conveyer": "^2",
+    "@nesvet/eslint-config": "^1"
+  }
 }
