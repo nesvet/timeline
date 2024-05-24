@@ -4,8 +4,8 @@
 		"browser": true,
 		"node": true
 	},
-	"root": true,
 	"ignorePatterns": [
 		"dist/*"
-	]
+	],
+	"root": true
 }
