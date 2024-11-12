@@ -5,7 +5,7 @@
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
-  "packageManager": "bun@1.1.12",
+  "packageManager": "bun@1.1.34",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "bun .conveyer.js",
@@ -25,6 +25,7 @@
   "author": "Eugene Nesvetaev <dev@nesvet.dev> (https://nesvet.dev/)",
   "license": "MIT",
   "devDependencies": {
+    "@nesvet/conveyer": "^2.2.7",
     "@nesvet/eslint-config": "^2.0.34",
     "typescript": "^5.6.3"
   }
