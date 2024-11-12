@@ -3,30 +3,37 @@ import { Timeline } from "./Timeline";
 import { Timepiece } from "./Timepiece";
 
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
 export class IntervalTimeline extends Timeline {
 	
-	set(value, from, to) {
+	#m = new Map<any, string>();
+	
+	set(value: any, from: null | number): void;
+	set(value: any, from: null | number, to: null | number): void;
+	set(value: any, from: null | number, to?: null | number) {
 		if (typeof from != "number" || typeof to != "number") {
 			from = null;
 			to = null;
 		}
 		
 		const tsString = `${from}-${to}`;
-		const mtsString = this.m.get(value);
+		const mtsString = this.#m.get(value);
 		
 		if (tsString !== mtsString) {
 			if (mtsString)
 				this.remove(value);
 			
-			this.m.set(value, tsString);
+			this.#m.set(value, tsString);
 			
 			if (from === null)
 				this.limbo.add(value);
 			else {
 				const fromIndex = tsToIndex(from);
-				const toIndex = tsToIndex(to);
+				const toIndex = to ? tsToIndex(to) : this.a.length - 1;
 				
-				for (let ts = from, index = fromIndex; index < toIndex; ts += 86_400_000, index++)
+				for (let index = fromIndex, ts = from; index < toIndex; ts += 86_400_000, index++)
 					if (!this.a[index]?.add(value))
 						this.a[index] = new Timepiece([ value ], ts);
 				
@@ -42,21 +49,21 @@ export class IntervalTimeline extends Timeline {
 		
 	}
 	
-	remove(value) {
+	remove(value: any) {
 		
-		if (this.m.size > 1) {
+		if (this.#m.size > 1) {
 			
-			const tsString = this.m.get(value);
+			const tsString = this.#m.get(value);
 			
 			if (tsString) {
-				this.m.delete(value);
+				this.#m.delete(value);
 				
 				if (tsString === "null-null")
 					this.limbo.delete(value);
 				else {
 					const [ from, to ] = tsString.split(/-/);
-					const fromIndex = tsToIndex(parseInt(from));
-					const toIndex = tsToIndex(parseInt(to));
+					const fromIndex = tsToIndex(Number.parseInt(from));
+					const toIndex = tsToIndex(Number.parseInt(to));
 					
 					for (let index = fromIndex; index < toIndex; index++) {
 						const piece = this.a[index];
@@ -72,21 +79,23 @@ export class IntervalTimeline extends Timeline {
 						while (!this.a[this.firstIndex]);
 						this.startAt = indexToTs(this.firstIndex);
 					}
-					if (toIndex === this.a.length && !this.a[this.a.length - 1]) {
+					if (toIndex === this.a.length && !this.a.at(-1)) {
 						do
 							this.a.length--;
-						while (!this.a[this.a.length - 1]);
+						while (!this.a.at(-1));
 						this.endAt = indexToTs(this.a.length - 1);
 					}
 				}
 			}
-		} else if (this.m.has(value))
+		} else if (this.#m.has(value))
 			this.clear();
 		
 	}
 	
 	delete = this.remove;
 	
+	get size() {
+		return this.#m.size;
+	}
+	
 }
-
-Timeline.Interval = IntervalTimeline;

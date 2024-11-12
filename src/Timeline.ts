@@ -1,18 +1,24 @@
 import { indexToTs, tsToIndex } from "./common";
+import { IntervalTimeline } from "./IntervalTimeline";
 import { Timepiece } from "./Timepiece";
 
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+
 export class Timeline {
-	constructor() {
-		
-		this.clear();
-		
-	}
+	
+	a: any[] = [];
+	#m = new Map<any, null | number>();
+	limbo = new Timepiece([], null);
+	firstIndex = 4294967294;
+	startAt: null | number = null;
+	endAt: null | number = null;
 	
 	clear() {
 		
 		this.a = [];
-		this.m = new Map();
+		this.#m = new Map();
 		this.limbo = new Timepiece([], null);
 		this.firstIndex = 4294967294;
 		this.startAt = null;
@@ -20,17 +26,17 @@ export class Timeline {
 		
 	}
 	
-	set(value, at) {
+	set(value: any, at: null | number) {
 		if (typeof at != "number")
 			at = null;
 		
-		const mat = this.m.get(value);
+		const mat = this.#m.get(value);
 		
 		if (at !== mat) {
 			if (mat)
 				this.remove(value);
 			
-			this.m.set(value, at);
+			this.#m.set(value, at);
 			
 			if (at === null)
 				this.limbo.add(value);
@@ -52,13 +58,13 @@ export class Timeline {
 		
 	}
 	
-	remove(value) {
+	remove(value: any) {
 		
-		if (this.m.size > 1) {
-			const at = this.m.get(value);
+		if (this.#m.size > 1) {
+			const at = this.#m.get(value);
 			
 			if (at !== undefined) {
-				this.m.delete(value);
+				this.#m.delete(value);
 				
 				if (at === null)
 					this.limbo.delete(value);
@@ -80,22 +86,22 @@ export class Timeline {
 						} else if (index === this.a.length - 1) {
 							do
 								this.a.length--;
-							while (!this.a[this.a.length - 1]);
+							while (!this.a.at(-1));
 							this.endAt = indexToTs(this.a.length - 1);
 						}
 					}
 				}
 			}
-		} else if (this.m.has(value))
+		} else if (this.#m.has(value))
 			this.clear();
 		
 	}
 	
 	delete = this.remove;
 	
-	getValues(from, to, includeEnd) {
-		let index = this.startAt >= from ? this.firstIndex : tsToIndex(from);
-		let toIndex = this.endAt <= to ? this.a.length - 1 : tsToIndex(to);
+	getValues(from: number, to: number, includeEnd: boolean) {
+		let index = this.startAt === null || this.startAt >= from ? this.firstIndex : tsToIndex(from);
+		let toIndex = this.endAt === null || this.endAt <= to ? this.a.length - 1 : tsToIndex(to);
 		
 		if (includeEnd)
 			toIndex++;
@@ -110,9 +116,9 @@ export class Timeline {
 		return values;
 	}
 	
-	getRange(from, to = this.endAt, includeEnd) {
+	getRange(from: number, to = this.endAt, includeEnd: boolean) {
 		let index = tsToIndex(from);
-		let toIndex = tsToIndex(to);
+		let toIndex = to ? tsToIndex(to) : this.a.length - 1;
 		if (includeEnd)
 			toIndex++;
 		
@@ -124,9 +130,9 @@ export class Timeline {
 		return range;
 	}
 	
-	getRangeMap(from, to = this.endAt, includeEnd) {
+	getRangeMap(from: number, to = this.endAt, includeEnd: boolean) {
 		let index = tsToIndex(from);
-		let toIndex = tsToIndex(to);
+		let toIndex = to ? tsToIndex(to) : this.a.length - 1;
 		if (includeEnd)
 			toIndex++;
 		
@@ -139,7 +145,10 @@ export class Timeline {
 	}
 	
 	get size() {
-		return this.m.size;
+		return this.#m.size;
 	}
+	
+	
+	static Interval = IntervalTimeline;
 	
 }
